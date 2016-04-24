@@ -1,4 +1,5 @@
-ws = new WebSocket("ws://217.75.82.232:8082/");
+
+var ws = new WebSocket("ws://127.0.0.1:8082/");
 var board,
     game = new Chess(),
     statusEl = $('#status'),
@@ -67,9 +68,12 @@ ws.onmessage = function (evt) {
         while (myNode.firstChild) {
             myNode.removeChild(myNode.firstChild);
         }
+        myNode=document.getElementById('refresh');
+        myNode.parentNode.removeChild(myNode);
+        myNode=document.getElementById('create');
+        myNode.parentNode.removeChild(myNode);
         //cfg.position= j.fen;
         board = ChessBoard('board', cfg);
-        alert(j.iswhite);
         mycolor='w';
         if (!j.iswhite){
             mycolor='b';
@@ -88,6 +92,7 @@ ws.onmessage = function (evt) {
         });
         var movestring= j.from+"-"+ j.to;
         board.move(movestring);
+        updateStatus();
     }
     if(j.messageType == "notice"){
 
@@ -95,6 +100,8 @@ ws.onmessage = function (evt) {
     }
 }
 ws.onclose = function() {
+    statusEl.html('game closed');
+
     alert("Closed!");
 };
 
@@ -106,7 +113,6 @@ var createRoom = function(){
     ws.send(text);
 }
 var sendmove = function(move){
-    alert(move.from);
     var text ='{"messageType":"move", "from":"tmp", "to":"tmp", "promotion":"q"}';
     var obj = JSON.parse(text);
     obj.from=move.from;
@@ -219,12 +225,12 @@ function validateForm() {
 
         // checkmate?
         if (game.in_checkmate() === true) {
-            status = 'Game over, ' + moveColor + ' is in checkmate.';
+            alert('Game over, ' + moveColor + ' is in checkmate.');
         }
 
         // draw?
         else if (game.in_draw() === true) {
-            status = 'Game over, drawn position';
+            alert('Game over, drawn position');
         }
 
         // game still on
@@ -236,10 +242,10 @@ function validateForm() {
                 status += ', ' + moveColor + ' is in check';
             }
         }
-
-        /*statusEl.html(status);
+        statusEl.html(status);
         fenEl.html(game.fen());
-        pgnEl.html(game.pgn());*/
+        pgnEl.html(game.pgn());
+        $(document).ready();
     };
     var onMouseoutSquare = function(square, piece) {
         removeGreySquares();

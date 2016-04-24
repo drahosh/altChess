@@ -5,32 +5,34 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <link rel="stylesheet" href="chessboardjs-0.3.0%20(1)/css/chessboard-0.3.0.css">
-
+   
 </head>
 <body>
+
+
+<script src="https://api.ipify.org?format=jsonp&callback=getIP"></script>
 <form name="myForm" onsubmit="return validateForm()" method="post">
     <div id="formtext">Name:</div> <input type="text" name="fname">
     <button type='button' id="formbutton" onclick="validateForm()">submit</button>
 </form>
 <table id="roomlist" style="width: 400px"></table>
 <div id="board" style="width: 400px"></div>
-Welcome to lorem ipsum
+<button id="create" onclick="createRoom()">Create room</button>
+<button id="refresh" onclick="refresh()">Refresh</button>
+
+<p>Status: <span id="status"></span></p>
+<p>PGN: <span id="pgn"></span></p>
+<p>FEN: <span id="fen"></span></p>
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 
 <script src="chessboardjs-0.3.0%20(1)/js/chessboard-0.3.0.js"></script>
 <script src="chess.js-master/chess.js"></script>
 <script src="index.js"></script>
 
-<button onclick="createRoom()">Create room</button>
-<button onclick="refresh()">Refresh</button>
 
 
 
-
-<!--<p>Status: <span id="status"></span></p>
-<p>FEN: <span id="fen"></span></p>
-<p>PGN: <span id="pgn"></span></p>
--->
 
 
 
