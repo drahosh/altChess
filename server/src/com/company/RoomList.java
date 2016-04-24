@@ -131,6 +131,7 @@ import org.eclipse.jetty.websocket.api.Session;
         return r;
     }
      void deleteroom(Room r){
+
          if(r.started){
              runningRooms.remove(r);
          }else{

@@ -18,27 +18,7 @@ import javax.json.stream.JsonParser;
 @WebSocket
 
 public class MyWebSocketHandler {
-    class HelloRunnable implements Runnable {
-        Session s;
 
-        HelloRunnable(Session session) {
-            this.s = session;
-        }
-
-        public void run() {
-            try {
-                while (true) {
-                    sleep(11000);
-                    s.getRemote().sendString(String.valueOf(n));
-
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-
-    }
 
     static int n;
     int myint;
@@ -49,6 +29,9 @@ public class MyWebSocketHandler {
     @OnWebSocketClose
     public void onClose(int statusCode, String reason) {
         System.out.println("Close: statusCode=" + statusCode + ", reason=" + reason);
+        //one of sends will fail
+        sendNotice("your oponent left",room.p1.s);
+        sendNotice("your oponent left",room.p2.s);
         r.deleteroom(room);
     }
 
@@ -76,15 +59,14 @@ public class MyWebSocketHandler {
         }
         */
     }
-    void sendNotice(String notice){
+    void sendNotice(String notice, Session se){
         JSONObject obj = new JSONObject();
         obj.put("messageType","notice");
         obj.put("text",notice);
         try{
-        s.getRemote().sendString(obj.toJSONString());
+        se.getRemote().sendString(obj.toJSONString());
 
         }catch(Exception e){
-            e.printStackTrace();
         }
     }
     @OnWebSocketMessage
@@ -108,7 +90,7 @@ public class MyWebSocketHandler {
             }
             if (json.get("messageType").equals("createRoom")) {
                 if (p.inroom){
-                    this.sendNotice("You cant create room if youre already in one");
+                    this.sendNotice("You cant create room if youre already in one",p.s);
                     return;
                 }
                 this.room=r.createRoom();
@@ -121,7 +103,7 @@ public class MyWebSocketHandler {
             }
             if (json.get("messageType").equals("joinRoom")) {
                 if (p.inroom){
-                    this.sendNotice("You cant join room if youre already in one");
+                    this.sendNotice("You cant join room if youre already in one",p.s);
                     return;
                 }
                 long l1=(long)json.get("number");
